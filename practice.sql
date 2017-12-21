@@ -1,16 +1,12 @@
+-- select distinct Student.sID, sName, GPA, Apply.cName, enrollment
+-- from Student, College, Apply
+-- where Apply.sID = Student.sID
+--   and Apply.cName = Apply.cName
+--   order by GPA desc, enrollment;
+
 -- select *
--- from Student;
+-- from Apply
+-- where major like '%bio%';
 
--- select sID, sName, gpa
--- from Student
--- where gpa > 3.6;
-
--- select distinct sname, major, decision
--- from Student, Apply
--- where Student.sID = Apply.sID
---   and sizeHS < 1000 and major = 'CS' and cname = 'Stanford';
-
-select College.cName
-from College, Apply
-where College.cName = Apply.cName
-  and enrollment > 2000 and major = 'CS';
+select sID, sName, sizeHS, GPA*(sizeHS/1000.0) as scaledGPA
+from Student;

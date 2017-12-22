@@ -14,12 +14,18 @@
 -- select sID from Apply where major = 'EE';
 
 -- except operator (\diff)
-select sID from Apply where major = 'CS'
-except
-select sID from Apply where major = 'EE';
+-- select sID from Apply where major = 'CS'
+-- except
+-- select sID from Apply where major = 'EE';
 
 -- in case the OS does not support except operator
-select distinct A1.sID
-from Apply A1, Apply A2
-where A1.sID = A2.sID
-  and A1.major = 'CS' and A2.major <> 'EE';
+-- select distinct A1.sID
+-- from Apply A1, Apply A2
+-- where A1.sID = A2.sID
+--   and A1.major = 'CS' and A2.major <> 'EE';
+
+-- subquery in WHERE clause
+select sID, sName
+from Student
+where sID
+  in (select sID from Apply where major = 'CS');

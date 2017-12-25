@@ -45,15 +45,27 @@
 --     and R1.ratingDate < R2.ratingDate)) as R
 -- where R.rID = Reviewer.rID and R.mID = Movie.mID;
 
--- Q7: For each movie that has at least one rating,
--- find the highest number of stars that movie received.
--- Return the movie title and number of stars. Sort by
--- movie title.
-select distinct title, stars
-from Movie, Rating R1
-where not exists
-    (select * from Rating R2
-    where R1.mID = R2.mID
-    and R2.stars > R1.stars)
-  and Movie.mID = R1.mID
-  order by title;
+-- -- Q7: For each movie that has at least one rating,
+-- -- find the highest number of stars that movie received.
+-- -- Return the movie title and number of stars. Sort by
+-- -- movie title.
+-- select distinct title, stars
+-- from Movie, Rating R1
+-- where not exists
+--     (select * from Rating R2
+--     where R1.mID = R2.mID
+--     and R2.stars > R1.stars)
+--   and Movie.mID = R1.mID
+--   order by title;
+
+-- Q8: For each movie, return the title and the 'rating spread',
+-- that is, the difference between highest and lowest ratings given
+-- to that movie. Sort by rating spread from highest to lowest, then
+-- by movie title.
+
+select title,
+(select max(stars) - min(stars) from Rating
+  where Rating.mID = Movie.mID) as rating_spread
+from Movie
+where rating_spread is not null
+order by rating_spread desc, title;

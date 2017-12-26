@@ -51,12 +51,20 @@
 --     (select R1.stars from Rating R1, Rating R2
 --       where R1.stars > R2.stars);
 
--- Q7: List movie titles and average ratings, from highest-rated to lowest-rated.
--- If two or more movies have the same average rating, list them in alphabetical order.
-select title,
-  (select avg(stars)
-    from Rating
-    where Rating.mID = Movie.mID) as avg_rate
-from Movie
-where avg_rate is not null
-order by avg_rate desc, title;
+-- -- Q7: List movie titles and average ratings, from highest-rated to lowest-rated.
+-- -- If two or more movies have the same average rating, list them in alphabetical order.
+-- select title,
+--   (select avg(stars)
+--     from Rating
+--     where Rating.mID = Movie.mID) as avg_rate
+-- from Movie
+-- where avg_rate is not null
+-- order by avg_rate desc, title;
+
+-- Q8: Find the names of all reviewers who have contributed three or more ratings.
+-- (As an extra challenge, try writing the query without HAVING or without COUNT.)
+select distinct name
+from Reviewer, Rating R1
+where (select count(*) from Rating R2
+        where R1.rID = R2.rID) >= 3
+    and Reviewer.rID = R1.rID;

@@ -11,11 +11,17 @@
 -- where name = director and Movie.mID = Rating.mID
 --       and Reviewer.rID = Rating.rID;
 
--- Q3: Return all reviewer names and movie names together in a single list,
--- alphabetized. (Sorting by the first name of the reviewer and first word in
--- the title is fine; no need for special processing on last names or removing "The".)
-select name
-from Reviewer
-union
-select title
-from Movie;
+-- -- Q3: Return all reviewer names and movie names together in a single list,
+-- -- alphabetized. (Sorting by the first name of the reviewer and first word in
+-- -- the title is fine; no need for special processing on last names or removing "The".)
+-- select name
+-- from Reviewer
+-- union
+-- select title
+-- from Movie;
+
+-- Q4: Find the titles of all movies not reviewed by Chris Jackson.
+select title from Movie
+where mID not in (select mID from Reviewer, Rating
+                  where Reviewer.rID = Rating.rID
+                        and name = 'Chris Jackson');

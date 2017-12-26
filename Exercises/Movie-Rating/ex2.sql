@@ -41,12 +41,22 @@
 --       and Reviewer.rID = Rating.rID) L2
 -- where L1.title = L2.title and L1.name < L2.name;
 
--- Q6: For each rating that is the lowest (fewest stars) currently in the database, return
--- the reviewer name, movie title, and number of stars.
-select name, title, stars
-from Reviewer, Movie, Rating
-where Movie.mID = Rating.mID
-  and Rating.rID = Reviewer.rID
-  and stars not in
-    (select R1.stars from Rating R1, Rating R2
-      where R1.stars > R2.stars);
+-- -- Q6: For each rating that is the lowest (fewest stars) currently in the database, return
+-- -- the reviewer name, movie title, and number of stars.
+-- select name, title, stars
+-- from Reviewer, Movie, Rating
+-- where Movie.mID = Rating.mID
+--   and Rating.rID = Reviewer.rID
+--   and stars not in
+--     (select R1.stars from Rating R1, Rating R2
+--       where R1.stars > R2.stars);
+
+-- Q7: List movie titles and average ratings, from highest-rated to lowest-rated.
+-- If two or more movies have the same average rating, list them in alphabetical order.
+select title,
+  (select avg(stars)
+    from Rating
+    where Rating.mID = Movie.mID) as avg_rate
+from Movie
+where avg_rate is not null
+order by avg_rate desc, title;

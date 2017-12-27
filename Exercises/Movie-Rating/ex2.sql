@@ -61,10 +61,20 @@
 -- where avg_rate is not null
 -- order by avg_rate desc, title;
 
--- Q8: Find the names of all reviewers who have contributed three or more ratings.
--- (As an extra challenge, try writing the query without HAVING or without COUNT.)
-select distinct name
-from Reviewer, Rating R1
-where (select count(*) from Rating R2
-        where R1.rID = R2.rID) >= 3
-    and Reviewer.rID = R1.rID;
+-- -- Q8: Find the names of all reviewers who have contributed three or more ratings.
+-- -- (As an extra challenge, try writing the query without HAVING or without COUNT.)
+-- select distinct name
+-- from Reviewer, Rating R1
+-- where (select count(*) from Rating R2
+--         where R1.rID = R2.rID) >= 3
+--     and Reviewer.rID = R1.rID;
+
+-- Q9: Some directors directed more than one movie. For all such directors, return the
+-- titles of all movies directed by them, along with the director name. Sort by director
+-- name, then movie title. (As an extra challenge, try writing the query both with and
+-- without COUNT.)
+select M1.title, M1.director
+from Movie M1
+where (select count(*) from Movie M2
+        where M1.director = M2.director) > 1
+order by M1.director, M1.title;

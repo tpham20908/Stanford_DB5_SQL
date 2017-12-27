@@ -79,19 +79,27 @@
 --         where M1.director = M2.director) > 1
 -- order by M1.director, M1.title;
 
--- Q10: Find the movie(s) with the highest average rating. Return the movie title(s) and
--- average rating. (Hint: This query is more difficult to write in SQLite than other systems;
--- you might think of it as finding the highest average rating and then choosing the
--- movie(s) with that average rating.)
--- select distinct R1.mID as mID,
--- (select avg(stars) from Rating R2
--- where R2.mID = R1.mID) as avg_rate
--- from Rating R1;
+-- -- Q10: Find the movie(s) with the highest average rating. Return the movie title(s) and
+-- -- average rating. (Hint: This query is more difficult to write in SQLite than other systems;
+-- -- you might think of it as finding the highest average rating and then choosing the
+-- -- movie(s) with that average rating.)
+-- select title, avg(stars)
+-- from Rating join Movie using (mID)
+-- group by title
+-- having avg(stars) = (select max(avg_rate)
+--                     from
+--                       (select avg(stars) as avg_rate
+--                       from Rating join Movie using (mID)
+--                       group by title));
+
+-- Q11: Find the movie(s) with the lowest average rating. Return the movie title(s) and average
+-- rating. (Hint: This query may be more difficult to write in SQLite than other systems; you might
+-- think of it as finding the lowest average rating and then choosing the movie(s) with that
+-- average rating.)
 select title, avg(stars)
 from Rating join Movie using (mID)
 group by title
-having avg(stars) = (select max(avg_rate)
-                    from
-                      (select avg(stars) as avg_rate
-                      from Rating join Movie using (mID)
-                      group by title));
+having avg(stars) = (select min(avg_rate)
+                    from (select title, avg(stars) as avg_rate
+                          from Rating join Movie using (mID)
+                          group by title));

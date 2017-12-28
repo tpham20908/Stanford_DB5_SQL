@@ -51,16 +51,24 @@
 
 -- order by H1.grade, H1.name;
 
--- Q7: For each student A who likes a student B where the two are not friends, find if they have a friend C
--- in common (who can introduce them!). For all such trios, return the name and grade of A, B, and C.
-select (select name from Highschooler where ID = LikesNotFriend.ID1),
-       (select grade from Highschooler where ID = LikesNotFriend.ID1),
-       (select name from Highschooler where ID = LikesNotFriend.ID2),
-       (select grade from Highschooler where ID = LikesNotFriend.ID2),
-       (select name from Highschooler where ID = MutualFriend.ID2),
-       (select grade from Highschooler where ID = MutualFriend.ID2)
-from
-  (select * from Likes except select * from Friend) LikesNotFriend
-  join Friend MutualFriend on LikesNotFriend.ID1 = MutualFriend.ID1
-where exists (select * from Friend
-              where LikesNotFriend.ID2 = ID1 and MutualFriend.ID2 = ID2);
+-- -- Q7: For each student A who likes a student B where the two are not friends, find if they have a friend C
+-- -- in common (who can introduce them!). For all such trios, return the name and grade of A, B, and C.
+-- select
+--   (select name from Highschooler where ID = LikesNotFriend.ID1),
+--   (select grade from Highschooler where ID = LikesNotFriend.ID1),
+--   (select name from Highschooler where ID = LikesNotFriend.ID2),
+--   (select grade from Highschooler where ID = LikesNotFriend.ID2),
+--   (select name from Highschooler where ID = MutualFriend.ID2),
+--   (select grade from Highschooler where ID = MutualFriend.ID2)
+-- from
+--   (select * from Likes except select * from Friend) LikesNotFriend
+--   join Friend MutualFriend on LikesNotFriend.ID1 = MutualFriend.ID1
+-- where exists
+--   (select *
+--    from Friend
+--    where LikesNotFriend.ID2 = ID1 and MutualFriend.ID2 = ID2);
+
+-- Q8: Find the difference between the number of students in the school and the number of different first names.
+select distinct (select count(*) from Highschooler) -
+        (select count(distinct name) from Highschooler)
+from Highschooler;

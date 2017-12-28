@@ -10,11 +10,20 @@
 -- where H1.ID = ID1 and H2.ID = ID2
 --   and (H1.grade - H2.grade) >= 2;
 
--- Q3: For every pair of students who both like each other, return the name and grade of both
--- students. Include each pair only once, with the two names in alphabetical order.
-select H1.name, H1.grade, H2.name, H2.grade
-from Highschooler H1, Highschooler H2, Likes
-where H1.ID = ID1 and ID2 = H2.ID
-  and H2.ID in (select ID1 from Likes)
-  and H1.ID in (select ID2 from Likes)
-  and H1.name < H2.name;
+-- -- Q3: For every pair of students who both like each other, return the name and grade of both
+-- -- students. Include each pair only once, with the two names in alphabetical order.
+-- select H1.name, H1.grade, H2.name, H2.grade
+-- from Highschooler H1, Highschooler H2, Likes
+-- where H1.ID = ID1 and ID2 = H2.ID
+--   and H2.ID in (select ID1 from Likes)
+--   and H1.ID in (select ID2 from Likes)
+--   and H1.name < H2.name;
+
+-- Q4: Find all students who do not appear in the Likes table (as a student who likes or is liked)
+-- and return their names and grades. Sort by grade, then by name within each grade.
+select name, grade
+from Highschooler
+where ID not in (select ID1 from Likes
+                  union
+                  select ID2 from Likes)
+order by grade, name;

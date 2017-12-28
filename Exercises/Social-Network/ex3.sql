@@ -19,11 +19,18 @@
 --   and H1.ID in (select ID2 from Likes)
 --   and H1.name < H2.name;
 
--- Q4: Find all students who do not appear in the Likes table (as a student who likes or is liked)
--- and return their names and grades. Sort by grade, then by name within each grade.
-select name, grade
-from Highschooler
-where ID not in (select ID1 from Likes
-                  union
-                  select ID2 from Likes)
-order by grade, name;
+-- -- Q4: Find all students who do not appear in the Likes table (as a student who likes or is liked)
+-- -- and return their names and grades. Sort by grade, then by name within each grade.
+-- select name, grade
+-- from Highschooler
+-- where ID not in (select ID1 from Likes
+--                   union
+--                   select ID2 from Likes)
+-- order by grade, name;
+
+-- Q5: For every situation where student A likes student B, but we have no information about whom B
+-- likes (that is, B does not appear as an ID1 in the Likes table), return A and B's names and grades.
+select H1.name, H1.grade, H2.name, H2.grade
+from Highschooler H1, Highschooler H2, Likes
+where H1.ID = ID1 and ID2 = H2.ID
+  and H2.ID not in (select ID1 from Likes);

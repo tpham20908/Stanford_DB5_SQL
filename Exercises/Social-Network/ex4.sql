@@ -19,8 +19,26 @@
 --       join Highschooler H2 on ID2 = H2.ID
 -- where H1.grade = H2.grade;
 
--- Q3: What is the average number of friends per student? (Your result should be just one number.)
-select distinct
-  ((select count(*) from Friend) * 1.0) /
-  (select count(distinct ID1) from Friend)
-from Friend;
+-- -- Q3: What is the average number of friends per student? (Your result should be just one number.)
+-- select distinct
+--   ((select count(*) from Friend) * 1.0) /
+--   (select count(distinct ID1) from Friend)
+-- from Friend;
+
+-- Q4: Find the number of students who are either friends with Cassandra or are friends of friends
+-- of Cassandra. Do not count Cassandra, even though technically she is a friend of a friend.
+select count(*)
+from (
+  select ID2
+  from Highschooler join Friend on ID = ID1
+  where name = 'Cassandra'
+  union
+  select ID2
+  from Friend
+  where ID1 in
+    (select ID2
+    from Highschooler join Friend on ID = ID1
+    where name = 'Cassandra')
+  except
+  select ID from Highschooler where name = 'Cassandra'
+);

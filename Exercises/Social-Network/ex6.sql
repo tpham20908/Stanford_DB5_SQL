@@ -13,8 +13,9 @@
 -- Q3: For all cases where A is friends with B, and B is friends with C, add a new friendship
 -- for the pair A and C. Do not add duplicate friendships, friendships that already exist, or friendships
 -- with oneself. (This one is a bit challenging; congratulations if you get it right.)
-
-
-select distinct A.ID1 as ID1, C.ID2 as ID2
-from Friend A, Friend B, Friend C, Friend
-where A.ID2 = B.ID1 and B.ID2 = C.ID1 and A.ID1 <> C.ID2;
+insert into Friend
+select F1.ID1, F2.ID2
+from Friend F1 join Friend F2 on (F1.ID2 = F2.ID1)
+where F1.ID1 <> F2.ID2
+except
+select * from Friend;
